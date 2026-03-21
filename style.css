@@ -592,7 +592,6 @@ img {
 
 .map-wrapper iframe {
     display: block;
-    filter: grayscale(1) invert(1) contrast(1.1) brightness(0.6);
 }
 
 /* ============================================
