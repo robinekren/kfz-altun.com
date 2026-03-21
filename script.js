@@ -2,29 +2,56 @@
 // KFZ ALTUN — Scripts
 // ============================================
 
-// Animated Hero Words
-const words = ['Leidenschaft.', 'Präzision.', 'Vertrauen.', 'Familie.', 'Handwerk.', 'Qualität.'];
+// Animated Hero Words — Typewriter Effect
+const words = ['Leidenschaft.', 'Präzision.', 'Zuverlässigkeit.', 'Familie.', 'Handwerk.', 'Qualität.'];
 let currentIndex = 0;
 const heroWord = document.getElementById('heroWord');
+const heroCursor = document.querySelector('.hero-cursor');
 
-function cycleWords() {
+const TYPE_SPEED = 80;
+const DELETE_SPEED = 50;
+const BLINK_PAUSE = 1000;
+
+function typeWriter() {
     if (!heroWord) return;
+    const word = words[currentIndex];
+    let charIndex = 0;
 
-    heroWord.classList.add('fade-out');
+    // Type forward
+    function typeChar() {
+        if (charIndex <= word.length) {
+            heroWord.textContent = word.slice(0, charIndex);
+            charIndex++;
+            setTimeout(typeChar, TYPE_SPEED);
+        } else {
+            // Word complete — blink cursor 2 times then delete
+            if (heroCursor) heroCursor.style.animation = 'blink 0.5s step-end 4';
+            setTimeout(deleteWord, BLINK_PAUSE * 2);
+        }
+    }
 
-    setTimeout(() => {
-        currentIndex = (currentIndex + 1) % words.length;
-        heroWord.textContent = words[currentIndex];
-        heroWord.classList.remove('fade-out');
-        heroWord.classList.add('fade-in');
+    // Delete backward
+    function deleteWord() {
+        if (heroCursor) heroCursor.style.animation = 'blink 1s infinite';
+        let delIndex = word.length;
+        function deleteChar() {
+            if (delIndex >= 0) {
+                heroWord.textContent = word.slice(0, delIndex);
+                delIndex--;
+                setTimeout(deleteChar, DELETE_SPEED);
+            } else {
+                // Move to next word immediately
+                currentIndex = (currentIndex + 1) % words.length;
+                typeWriter();
+            }
+        }
+        deleteChar();
+    }
 
-        setTimeout(() => {
-            heroWord.classList.remove('fade-in');
-        }, 400);
-    }, 400);
+    typeChar();
 }
 
-setInterval(cycleWords, 2500);
+typeWriter();
 
 // Navigation scroll effect
 const nav = document.getElementById('nav');

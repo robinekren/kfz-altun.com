@@ -295,17 +295,6 @@ img {
 .hero-title-dynamic {
     color: var(--red-light);
     display: inline-block;
-    transition: opacity 0.4s ease, transform 0.4s ease;
-}
-
-.hero-title-dynamic.fade-out {
-    opacity: 0;
-    transform: translateY(10px);
-}
-
-.hero-title-dynamic.fade-in {
-    opacity: 1;
-    transform: translateY(0);
 }
 
 .hero-cursor {
