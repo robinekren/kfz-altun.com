@@ -293,6 +293,10 @@ img {
     display: block;
 }
 
+.hero-title-dynamic-line {
+    min-height: 1.1em;
+}
+
 .hero-title-dynamic-wrapper {
     display: inline-flex;
     align-items: baseline;
