@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 160" fill="none">
+  <!-- Upper car silhouette (white) - sleek sedan body outline -->
+  <path d="M 40 78
+           Q 55 76, 70 72
+           Q 85 68, 95 58
+           Q 105 48, 115 40
+           Q 130 30, 150 26
+           Q 170 22, 190 24
+           Q 210 26, 225 32
+           Q 235 36, 242 42
+           Q 250 48, 255 56
+           Q 260 64, 268 70
+           Q 272 72, 278 74
+           L 278 78
+           Q 260 77, 240 77
+           Q 200 76, 160 76
+           Q 120 76, 80 77
+           Q 60 78, 40 78
+           Z"
+        fill="#FFFFFF"/>
+
+  <!-- White car window/detail line -->
+  <path d="M 78 72
+           Q 90 66, 100 56
+           Q 110 46, 120 38
+           Q 130 32, 145 28"
+        stroke="#FFFFFF" stroke-width="1.2" stroke-linecap="round" fill="none" opacity="0.5"/>
+
+  <!-- Window divider -->
+  <path d="M 145 28 Q 146 50, 148 72"
+        stroke="#FFFFFF" stroke-width="0.8" fill="none" opacity="0.35"/>
+
+  <!-- Lower car silhouette (red) - mirrored/chassis reflection -->
+  <path d="M 35 82
+           Q 50 82, 65 83
+           Q 80 84, 90 86
+           Q 100 88, 108 92
+           Q 115 96, 122 102
+           Q 130 108, 140 114
+           Q 155 122, 170 126
+           Q 185 128, 200 126
+           Q 215 124, 228 118
+           Q 238 112, 245 106
+           Q 252 100, 256 94
+           Q 260 90, 265 87
+           Q 270 85, 280 83
+           L 280 82
+           Q 260 82, 240 82
+           Q 200 82, 160 82
+           Q 120 82, 80 82
+           Q 55 82, 35 82
+           Z"
+        fill="#DC2626"/>
+
+  <!-- Red accent detail lines -->
+  <path d="M 90 86
+           Q 100 90, 108 96
+           Q 118 104, 128 110"
+        stroke="#EF4444" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.4"/>
+
+  <path d="M 258 90
+           Q 265 86, 272 84"
+        stroke="#EF4444" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.4"/>
+</svg>
