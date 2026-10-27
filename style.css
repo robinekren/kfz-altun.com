@@ -830,3 +830,13 @@ img {
         max-width: 100%;
     }
 }
+
+/* Google Bewertung */
+.review-section { padding-top: 0; }
+.review-card {
+    max-width: 720px; margin: 0 auto; text-align: center;
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-xl);
+    padding: 48px 24px;
+}
+.review-stars { color: #FBBC04; font-size: 32px; letter-spacing: 6px; margin-bottom: 16px; }
+.review-card .cta-text { margin: 12px auto 28px; max-width: 520px; }
