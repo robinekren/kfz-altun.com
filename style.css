@@ -112,8 +112,9 @@ img {
 }
 
 .logo-icon {
-    width: 32px;
-    height: 32px;
+    height: 40px;
+    width: auto;
+    display: block;
 }
 
 .nav-links {
