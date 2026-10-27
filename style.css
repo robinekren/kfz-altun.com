@@ -841,6 +841,49 @@ img {
 .review-stars { color: #FBBC04; font-size: 32px; letter-spacing: 6px; margin-bottom: 16px; }
 .review-card .cta-text { margin: 12px auto 28px; max-width: 520px; }
 
+/* Echte Google-Bewertungen (leer = hidden, kein Platz) */
+.greviews[hidden] { display: none; }
+.greviews { max-width: 1100px; margin: 0 auto 32px; }
+.greviews-head { text-align: center; margin-bottom: 20px; }
+.greviews-avg { color: var(--text-secondary); font-size: 16px; }
+.greviews-avg strong { color: var(--text-primary); font-size: 22px; font-weight: 700; margin-right: 2px; }
+.greviews-list {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px;
+}
+.greview {
+    display: flex; flex-direction: column; gap: 10px;
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg);
+    padding: 20px; text-align: left;
+}
+.greview-top { display: flex; flex-direction: column; gap: 4px; }
+.greview-author { color: var(--text-primary); font-weight: 600; font-size: 15px; text-decoration: none; }
+a.greview-author:hover { color: var(--red-light); }
+.greview-stars { color: #FBBC04; letter-spacing: 2px; font-size: 15px; }
+.greview-text {
+    color: var(--text-secondary); font-size: 14px; line-height: 1.6; white-space: pre-line;
+    display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 5; line-clamp: 5; overflow: hidden;
+}
+.greview-text.open { display: block; -webkit-line-clamp: unset; line-clamp: unset; overflow: visible; }
+.greview-more {
+    align-self: flex-start; background: none; border: 0; padding: 0; cursor: pointer;
+    color: var(--red-light); font: inherit; font-size: 14px; font-weight: 600;
+}
+.greview-time { color: var(--text-muted); font-size: 13px; margin-top: auto; }
+.greviews-foot {
+    display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px 20px;
+    margin-top: 20px; font-size: 14px;
+}
+.greviews-source { color: var(--text-muted); }
+.greviews-all { color: var(--red-light); font-weight: 600; text-decoration: none; }
+.greviews-all:hover { color: var(--red); text-decoration: underline; }
+@media (max-width: 768px) {
+    .greviews-list {
+        display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 12px;
+        margin: 0 -24px; padding: 0 24px 8px; scroll-padding-left: 24px; -webkit-overflow-scrolling: touch;
+    }
+    .greview { flex: 0 0 82%; scroll-snap-align: start; }
+}
+
 /* ============================================
    Region + FAQ
    ============================================ */

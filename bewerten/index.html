@@ -57,11 +57,26 @@
   // Google-Bewertungslink aus dem Unternehmensprofil (Rezensionen erhalten → Link kopieren)
   const REVIEW_URL = '';
   const btn = document.getElementById('reviewBtn');
+  function setWaiting() {
+    btn.classList.add('wait');
+    btn.lastChild.textContent = ' Google-Bewertung in Kürze verfügbar';
+  }
   if (REVIEW_URL) {
     btn.href = REVIEW_URL;
   } else {
+    // Fallback: Link aus GOOGLE_PLACE_ID (Vercel-Env) über /api/review-link
     btn.classList.add('wait');
-    btn.lastChild.textContent = ' Google-Bewertung in Kürze verfügbar';
+    fetch('/api/review-link')
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) {
+        if (d && typeof d.url === 'string' && d.url.indexOf('https://search.google.com/') === 0) {
+          btn.href = d.url;
+          btn.classList.remove('wait');
+        } else {
+          setWaiting();
+        }
+      })
+      .catch(setWaiting);
   }
 </script>
 </body>
