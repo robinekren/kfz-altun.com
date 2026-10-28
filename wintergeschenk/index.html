@@ -384,14 +384,18 @@
     const payload = { name: name, tel: tel, tag: form.tag.value, zeit: form.zeit.value, auto: form.auto.value.trim(), source: source, campaign: campaign,
       date: (tagOpt && tagOpt.dataset.date) || '', start: (zeitOpt && zeitOpt.dataset.start) || '', end: (zeitOpt && zeitOpt.dataset.end) || '' };
     let code = '', stored = false, local = false;
-    try {
-      const ctrl = 'AbortController' in window ? new AbortController() : null;
-      const t = ctrl && setTimeout(() => ctrl.abort(), 8000);
-      const r = await fetch('/api/claim', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload), signal: ctrl && ctrl.signal });
-      if (t) clearTimeout(t);
-      const j = r.ok ? await r.json() : null;
-      if (j && j.ok && /^WG-[A-Z2-9]{4,5}$/.test(j.code)) { code = j.code; stored = !!j.stored; }
-    } catch (x) {}
+    // Bis zu 3 Versuche, damit keine Anfrage verloren geht
+    for (let attempt = 0; attempt < 3 && !code; attempt++) {
+      if (attempt) await new Promise(r => setTimeout(r, attempt * 1200));
+      try {
+        const ctrl = 'AbortController' in window ? new AbortController() : null;
+        const t = ctrl && setTimeout(() => ctrl.abort(), 8000);
+        const r = await fetch('/api/claim', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload), signal: ctrl && ctrl.signal, keepalive: true });
+        if (t) clearTimeout(t);
+        const j = r.ok ? await r.json() : null;
+        if (j && j.ok && /^WG-[A-Z2-9]{4,5}$/.test(j.code)) { code = j.code; stored = !!j.stored; }
+      } catch (x) {}
+    }
     if (!code) { code = localCode(); local = true; }
     const claim = Object.assign({}, payload, { code: code, stored: stored, local: local, createdAt: new Date().toISOString() });
     track('lead_submit', { tag: payload.tag, zeit: payload.zeit, code: code, local: local });

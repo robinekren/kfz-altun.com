@@ -29,23 +29,21 @@ function safeEqual(a, b) {
 }
 
 async function listClaims(token) {
-  const auth = { authorization: 'Bearer ' + token, 'x-api-version': '7' };
+  const { list, get } = require('@vercel/blob');
+  const opts = token ? { token } : {};
   const blobs = [];
-  let cursor = '';
+  let cursor;
   for (let page = 0; page < 20; page++) {
-    const url = BLOB_API + '?prefix=' + encodeURIComponent(PREFIX) + '&limit=1000' + (cursor ? '&cursor=' + encodeURIComponent(cursor) : '');
-    const r = await fetch(url, { headers: auth });
-    if (!r.ok) throw new Error('list ' + r.status);
-    const data = await r.json();
+    const data = await list({ ...opts, prefix: PREFIX, limit: 1000, cursor });
     blobs.push(...(data.blobs || []));
     if (!data.hasMore || !data.cursor) break;
     cursor = data.cursor;
   }
   const claims = await Promise.all(blobs.map(async (b) => {
     try {
-      const r = await fetch(b.downloadUrl || b.url, { headers: { authorization: 'Bearer ' + token } });
-      if (!r.ok) return null;
-      return await r.json();
+      const r = await get(b.pathname, { ...opts, access: 'private', useCache: false });
+      if (!r || !r.stream) return null;
+      return await new Response(r.stream).json();
     } catch (e) { return null; }
   }));
   return claims.filter(Boolean).sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));

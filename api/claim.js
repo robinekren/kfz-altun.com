@@ -64,20 +64,9 @@ async function readBody(req) {
 }
 
 async function storeBlob(token, pathname, json) {
-  const r = await fetch(BLOB_API + '/' + pathname, {
-    method: 'PUT',
-    headers: {
-      authorization: 'Bearer ' + token,
-      'x-api-version': '7',
-      'x-content-type': 'application/json',
-      'x-add-random-suffix': '0',
-      'x-vercel-blob-access': 'public', // Pfad enthält zufälligen 16-stelligen Teil → nicht erratbar
-      'x-cache-control-max-age': '60',
-    },
-    body: json,
-  });
-  if (!r.ok) throw new Error('blob ' + r.status + ' ' + (await r.text().catch(() => '')).slice(0, 200));
-  return r.json().catch(() => ({}));
+  const { put } = require('@vercel/blob');
+  // Privater Store (Frankfurt): Inhalte nur mit Token lesbar
+  return put(pathname, json, { access: 'private', contentType: 'application/json', addRandomSuffix: false, token: token || undefined });
 }
 
 function withTimeout(ms) {
@@ -171,7 +160,7 @@ async function handler(req, res) {
 
   const token = process.env.BLOB_READ_WRITE_TOKEN;
   const store = async () => {
-    if (!token) return false;
+    if (!token && !process.env.BLOB_STORE_ID) return false;
     const stamp = claim.createdAt.replace(/[:.]/g, '-');
     const pathname = 'wintergeschenk/claims/' + stamp + '-' + code + '-' + crypto.randomBytes(8).toString('hex') + '.json';
     try {

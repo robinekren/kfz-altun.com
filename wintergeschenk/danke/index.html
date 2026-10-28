@@ -108,7 +108,7 @@
       <div class="head">
         <div class="eyebrow">Gesichert</div>
         <h1>Dein Wintergeschenk.</h1>
-        <p class="lead">Hier ist dein persönlicher Gutschein. Zeig den Code einfach bei uns in der Werkstatt.</p>
+        <p class="lead">Dein Termin ist vorgemerkt. Zeig diese Karte oder nenn einfach deinen Namen, wenn du bei uns bist.</p>
       </div>
 
       <article class="pass" id="pass" aria-label="Gutschein Wintergeschenk">
@@ -128,14 +128,14 @@
         <div class="pass-code">
           <span>Dein Code</span>
           <div class="code" id="vCode">WG-····</div>
-          <p>Zeig diesen Code in der Werkstatt</p>
+          <p>Diese Karte in der Werkstatt zeigen</p>
         </div>
         <div class="pass-foot">
           <b>Sandgasse 12, 2620 Neunkirchen</b><br>Mo–Fr 08:00–18:00 · Gültig solange Termine frei sind
         </div>
       </article>
 
-      <p class="note" id="note" hidden>Wir konnten deine Anfrage gerade nicht automatisch übermitteln. Bitte bestätige deinen Termin kurz per WhatsApp, dann ist alles fix.</p>
+      <p class="note" id="note" hidden>Tipp: Schick uns kurz eine WhatsApp, dann bestätigen wir deinen Termin noch schneller.</p>
 
       <div class="actions">
         <a class="btn btn-wa" id="wa" href="https://wa.me/436607036723" target="_blank" rel="noopener" data-cta="wa-confirm">
@@ -303,7 +303,7 @@
     ctx.fillStyle = '#fff'; ctx.font = '700 50px ' + MONO; if ('letterSpacing' in ctx) ctx.letterSpacing = '7px';
     ctx.fillText(document.getElementById('vCode').textContent, w / 2 + 3.5, 380 + dy);
     if ('letterSpacing' in ctx) ctx.letterSpacing = '0px';
-    ctx.font = '600 15px ' + F; ctx.fillText('Zeig diesen Code in der Werkstatt', w / 2, 412 + dy);
+    ctx.font = '600 15px ' + F; ctx.fillText('Diese Karte in der Werkstatt zeigen', w / 2, 412 + dy);
     // Fuß
     ctx.fillStyle = 'rgba(255,255,255,.06)'; ctx.fillRect(0, h - 96, w, 96);
     ctx.fillStyle = '#fff'; ctx.font = '600 13px ' + F; ctx.fillText('Sandgasse 12, 2620 Neunkirchen', w / 2, h - 58);
