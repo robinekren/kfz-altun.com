@@ -97,7 +97,7 @@ async function notify(claim) {
   const to = process.env.NOTIFY_EMAIL || 'robinekrenn@gmail.com';
   const subject = 'Neue Anfrage Wintergeschenk · ' + claim.code + ' · ' + claim.name;
   const fields = mailFields(claim);
-  const t = withTimeout(9000);
+  const t = withTimeout(45000);
   try {
     let r;
     if (process.env.RESEND_API_KEY) {
@@ -117,7 +117,7 @@ async function notify(claim) {
     } else {
       r = await fetch('https://formsubmit.co/ajax/' + encodeURIComponent(to), {
         method: 'POST',
-        headers: { 'content-type': 'application/json', accept: 'application/json' },
+        headers: { 'content-type': 'application/json', accept: 'application/json', origin: 'https://www.kfz-altun.com', referer: 'https://www.kfz-altun.com/wintergeschenk/' },
         body: JSON.stringify(Object.assign({ _subject: subject, _template: 'table', _captcha: 'false' }, fields)),
         signal: t.signal,
       });
@@ -171,7 +171,11 @@ async function handler(req, res) {
       return false;
     }
   };
-  const [stored, notified] = await Promise.all([store(), notify(claim)]);
+  // Mail läuft nach der Antwort weiter (FormSubmit braucht teils 30 s), Speichern wird abgewartet
+  const mail = notify(claim);
+  try { require('@vercel/functions').waitUntil(mail); } catch (e) { /* lokal ohne Paket */ }
+  const stored = await store();
+  const notified = 'queued';
 
   return send(res, 200, { ok: true, code, stored, notified, createdAt: claim.createdAt });
 }
