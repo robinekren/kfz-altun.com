@@ -8,7 +8,8 @@ const crypto = require('crypto');
 
 const ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // ohne 0/O/1/I
 const BLOB_API = 'https://blob.vercel-storage.com';
-const LIMITS = { name: 80, tel: 30, tag: 60, zeit: 60, auto: 80, source: 60, campaign: 80, date: 10, start: 5, end: 5 };
+const CONSENT_TEXT = 'Ja, Fahrzeugtechnik Altun darf mir gelegentlich Angebote und Tipps rund ums Auto per E-Mail schicken. Abbestellen jederzeit mit einem Klick.';
+const LIMITS = { name: 80, tel: 30, email: 120, tag: 60, zeit: 60, auto: 80, source: 60, campaign: 80, date: 10, start: 5, end: 5 };
 
 function send(res, status, body) {
   res.statusCode = status;
@@ -81,6 +82,8 @@ function mailFields(c) {
     Name: c.name,
     Telefon: c.tel,
     Wunschtermin: [c.tag, c.zeit].filter(Boolean).join(', ') || '–',
+    'E-Mail': c.email || '–',
+    Werbung: c.marketingConsent ? 'Ja, eingewilligt' : 'Nein',
     Auto: c.auto || '–',
     Code: c.code,
     Quelle: [c.source, c.campaign].filter(Boolean).join(' / '),
@@ -95,7 +98,7 @@ function htmlEsc(s) {
 // Benachrichtigung an Robin (nie an den Kunden). Gibt true/false zurück, wirft nie.
 async function notify(claim) {
   const to = process.env.NOTIFY_EMAIL || 'robinekrenn@gmail.com';
-  const subject = 'Neue Anfrage Wintergeschenk · ' + claim.code + ' · ' + claim.name;
+  const subject = '🎉 Neuer Kunde! ' + claim.name + ' will den Gratis-Wintercheck · ' + [claim.tag, (claim.zeit || '').split(' (')[0]].filter(Boolean).join(', ') + ' · ' + claim.code;
   const fields = mailFields(claim);
   const t = withTimeout(45000);
   try {
@@ -149,6 +152,11 @@ async function handler(req, res) {
 
   const now = new Date();
   const code = makeCode();
+  if (data.email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(data.email)) data.email = '';
+  // Werbe-Einwilligung nur, wenn das Kästchen aktiv angehakt wurde (DSGVO Art. 7, § 174 TKG)
+  const consent = body.marketing === true && !!data.email;
+  data.marketingConsent = consent;
+  data.consentText = consent ? CONSENT_TEXT : '';
   const claim = Object.assign({ code }, data, {
     source: data.source || 'direkt',
     createdAt: now.toISOString(),

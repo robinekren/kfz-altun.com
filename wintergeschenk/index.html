@@ -155,6 +155,12 @@
   details[open] summary::after { content: "–"; }
   details p { color: var(--ink-2); margin-top: 10px; font-size: 17px; }
 
+  .consent { display: flex; gap: 10px; align-items: flex-start; font-size: 13px; line-height: 1.45; color: var(--ink-2); margin: 2px 0 16px; cursor: pointer; }
+  .consent input { width: 18px; height: 18px; flex: 0 0 18px; margin-top: 1px; padding: 0; accent-color: var(--red); -webkit-appearance: checkbox; appearance: auto; }
+  .terms { max-width: 720px; margin: 0 auto; font-size: 14px; color: var(--ink-2); }
+  .terms h2 { font-size: 20px; text-align: left; letter-spacing: -.01em; color: var(--ink); margin-bottom: 12px; }
+  .terms ol { padding-left: 20px; display: grid; gap: 8px; }
+  .terms a { color: var(--ink-2); }
   footer { padding: 40px 0 120px; text-align: center; color: var(--ink-2); font-size: 14px; border-top: 1px solid rgba(0,0,0,.06); }
   footer a { margin: 0 8px; }
 
@@ -289,9 +295,14 @@
           <label for="auto">Auto <span style="color:var(--ink-2);font-weight:500">(optional)</span></label>
           <input id="auto" name="auto" placeholder="z. B. VW Golf 2016">
         </div>
+        <div class="field">
+          <label for="email">E-Mail <span style="color:var(--ink-2);font-weight:500">(optional)</span></label>
+          <input id="email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="name@beispiel.at">
+        </div>
+        <label class="consent"><input type="checkbox" id="marketing" name="marketing"> <span>Ja, Fahrzeugtechnik Altun darf mir gelegentlich Angebote und Tipps rund ums Auto per E-Mail schicken. Abbestellen jederzeit mit einem Klick.</span></label>
         <p class="err" id="err">Bitte Name und Telefonnummer angeben.</p>
         <button class="btn btn-red" type="submit" id="submit"><span class="lbl">Kostenlosen Wintercheck sichern</span><svg class="arr" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5"/></svg></button>
-        <p class="fine">Ein Tipp und du bekommst sofort deinen persönlichen Gutschein-Code. Kostenlos und unverbindlich. <a href="/datenschutz.html">Datenschutz</a></p>
+        <p class="fine">Kostenlos und unverbindlich. Mit dem Absenden gelten die <a href="#aktionsbedingungen">Aktionsbedingungen</a>. <a href="/datenschutz.html">Datenschutz</a></p>
       </form>
     </div>
     <div class="alt" style="max-width:560px;margin:16px auto 0">
@@ -313,6 +324,23 @@
     </div>
   </div>
 </section>
+
+<section id="aktionsbedingungen" class="terms-wrap" style="padding:48px 0 0">
+<div class="wrap terms">
+  <h2>Aktionsbedingungen Wintergeschenk</h2>
+  <ol>
+    <li><strong>Veranstalter:</strong> Fahrzeugtechnik Altun, Berkan Altun, Sandgasse 12, 2620 Neunkirchen, E-Mail: <a href="mailto:berkanaltun@hotmail.de">berkanaltun@hotmail.de</a>.</li>
+    <li><strong>Leistung:</strong> Kostenloser Batterietest und Kontrolle der Flüssigkeitsstände (Sichtprüfung) für dein Fahrzeug in unserer Werkstatt. Nachfüllen, Ersatzteile und Reparaturen sind nicht enthalten und werden nur nach deiner ausdrücklichen Zustimmung und mit vorherigem Preis angeboten.</li>
+    <li><strong>Unverbindlich:</strong> Es besteht keine Kauf- oder Auftragspflicht. Für den Test entstehen dir keine Kosten.</li>
+    <li><strong>Zeitraum:</strong> Solange Termine verfügbar sind. Die Anzahl der Termine ist begrenzt. Der Test erfolgt nur nach vorheriger Terminvereinbarung.</li>
+    <li><strong>Teilnahme:</strong> Ein Wintergeschenk pro Fahrzeug.</li>
+    <li><strong>Keine Barablöse:</strong> Die Leistung kann nicht in bar abgelöst, getauscht oder übertragen werden.</li>
+    <li><strong>Änderung:</strong> Wir können die Aktion aus wichtigem Grund vorzeitig beenden. Bereits vereinbarte Termine bleiben gültig.</li>
+    <li><strong>Datenschutz:</strong> Deine Kontaktdaten (Name, Telefonnummer, E-Mail, Fahrzeug) verwenden wir zur Vereinbarung und Durchführung des Termins. Eine Weitergabe an Dritte erfolgt nicht. Werbung per E-Mail schicken wir nur, wenn du dem gesondert zugestimmt hast; das kannst du jederzeit widerrufen. Die Daten werden nach Abschluss des Termins gelöscht, soweit keine gesetzliche Aufbewahrungspflicht besteht. Auskunft, Berichtigung und Löschung jederzeit per E-Mail an <a href="mailto:berkanaltun@hotmail.de">berkanaltun@hotmail.de</a>.</li>
+  </ol>
+</div>
+</section>
+
 
 <footer>
   <div class="wrap">
@@ -381,7 +409,7 @@
     busy = true; btn.disabled = true; btn.querySelector('.lbl').textContent = 'Wird gesichert …';
     const tagOpt = form.tag.selectedOptions ? form.tag.selectedOptions[0] : form.tag.options[form.tag.selectedIndex];
     const zeitOpt = form.zeit.selectedOptions ? form.zeit.selectedOptions[0] : form.zeit.options[form.zeit.selectedIndex];
-    const payload = { name: name, tel: tel, tag: form.tag.value, zeit: form.zeit.value, auto: form.auto.value.trim(), source: source, campaign: campaign,
+    const payload = { name: name, tel: tel, tag: form.tag.value, zeit: form.zeit.value, auto: form.auto.value.trim(), email: form.email.value.trim(), marketing: !!form.marketing.checked, source: source, campaign: campaign,
       date: (tagOpt && tagOpt.dataset.date) || '', start: (zeitOpt && zeitOpt.dataset.start) || '', end: (zeitOpt && zeitOpt.dataset.end) || '' };
     let code = '', stored = false, local = false;
     // Bis zu 3 Versuche, damit keine Anfrage verloren geht
