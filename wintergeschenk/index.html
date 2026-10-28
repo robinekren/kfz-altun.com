@@ -135,9 +135,14 @@
   .fine { font-size: 13px; color: var(--ink-2); text-align: center; margin-top: 14px; }
   .fine a { color: var(--ink-2); }
   .err { color: var(--red); font-size: 14px; display: none; }
-  .ok { display: none; text-align: center; }
-  .ok h3 { font-size: 26px; letter-spacing: -.02em; margin: 10px 0 6px; }
-  .ok p { color: var(--ink-2); }
+  .btn .arr { width: 20px; height: 20px; flex: 0 0 20px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; transition: transform .2s ease; }
+  .btn:hover .arr { transform: translateX(3px); }
+  .btn[disabled] { opacity: .7; cursor: progress; }
+  .saved { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; text-decoration: none; background: var(--ink); color: #fff; border-radius: 16px; padding: 14px 16px; margin-bottom: 22px; font-size: 15px; }
+  .saved[hidden] { display: none; }
+  .saved code { font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-weight: 700; letter-spacing: .12em; margin-left: 4px; }
+  .saved .go { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; }
+  .saved .arr { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
   .alt { display: flex; gap: 10px; margin-top: 18px; }
   .alt a { flex: 1; text-align: center; text-decoration: none; font-weight: 600; font-size: 15px; padding: 13px; border-radius: 14px; background: var(--bg-soft); }
 
@@ -155,7 +160,7 @@
 
   /* Sticky mobile CTA */
   .sticky { position: fixed; left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); z-index: 30; display: none; }
-  .sticky .btn { width: 100%; box-shadow: 0 12px 30px rgba(215,38,61,.35); }
+  .sticky .btn { width: 100%; box-shadow: 0 12px 30px rgba(215,38,61,.35); padding-left: 16px; padding-right: 16px; }
 
   @media (max-width: 760px) {
     .hero { padding-top: 48px; }
@@ -166,6 +171,9 @@
     .sticky { display: block; }
     .brand span { display: none; }
     .nav-cta { font-size: 13px; padding: 8px 14px; }
+    .hero-ctas .btn-red, .book .btn { font-size: 16px; padding-left: 18px; padding-right: 18px; gap: 8px; }
+    .book { padding: 28px 18px; }
+    .book .btn { font-size: 15px; padding-left: 10px; padding-right: 10px; white-space: nowrap; }
     .gift::after { right: -6px; top: -14px; width: 70px; height: 70px; font-size: 19px; }
   }
   @media (prefers-reduced-motion: no-preference) {
@@ -189,7 +197,7 @@
     <h1>Unser Wintergeschenk <span class="soft">für dich.</span></h1>
     <p class="lead">Kostenloser Batterietest und Kontrolle aller wichtigen Flüssigkeiten. Damit dein Auto auch an kalten Morgen sicher anspringt.</p>
     <div class="hero-ctas">
-      <a class="btn btn-red" href="#termin" data-cta="hero">Wintergeschenk sichern</a>
+      <a class="btn btn-red" href="#termin" data-cta="hero">Kostenlosen Wintercheck sichern<svg class="arr" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5"/></svg></a>
       <a class="btn btn-ghost" href="#leistungen">Was ist dabei?</a>
     </div>
     <div class="badges"><span>0 € · unverbindlich</span><span>ca. 15 Minuten</span><span>alle Marken</span></div>
@@ -251,8 +259,9 @@
 <section id="termin">
   <div class="wrap">
     <h2 class="reveal">Sichere dir dein Wintergeschenk.</h2>
-    <p class="sub reveal">Solange Termine frei sind. Wir melden uns schnell zur Bestätigung.</p>
+    <p class="sub reveal">Solange Termine frei sind. Du bekommst sofort deinen persönlichen Gutschein-Code.</p>
     <div class="book reveal">
+      <a class="saved" id="saved" href="/wintergeschenk/danke/" hidden><span><b>Dein Gutschein ist gespeichert.</b> Code <code id="savedCode"></code></span><span class="go">Ansehen<svg class="arr" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5"/></svg></span></a>
       <form id="form" novalidate>
         <div class="field">
           <label for="name">Name</label>
@@ -270,9 +279,9 @@
           <div class="field">
             <label for="zeit">Wunschzeit</label>
             <select id="zeit" name="zeit" required>
-              <option value="Vormittag (08–12 Uhr)">Vormittag · 08–12 Uhr</option>
-              <option value="Nachmittag (12–15 Uhr)">Nachmittag · 12–15 Uhr</option>
-              <option value="Spätnachmittag (15–18 Uhr)">Spätnachmittag · 15–18 Uhr</option>
+              <option value="Vormittag (08–12 Uhr)" data-start="08:00" data-end="12:00">Vormittag · 08–12 Uhr</option>
+              <option value="Nachmittag (12–15 Uhr)" data-start="12:00" data-end="15:00">Nachmittag · 12–15 Uhr</option>
+              <option value="Spätnachmittag (15–18 Uhr)" data-start="15:00" data-end="18:00">Spätnachmittag · 15–18 Uhr</option>
             </select>
           </div>
         </div>
@@ -281,15 +290,9 @@
           <input id="auto" name="auto" placeholder="z. B. VW Golf 2016">
         </div>
         <p class="err" id="err">Bitte Name und Telefonnummer angeben.</p>
-        <button class="btn btn-red" type="submit">Wintergeschenk sichern</button>
-        <p class="fine">Deine Anfrage geht per WhatsApp direkt an unsere Werkstatt. Kostenlos und unverbindlich. <a href="/datenschutz.html">Datenschutz</a></p>
+        <button class="btn btn-red" type="submit" id="submit"><span class="lbl">Kostenlosen Wintercheck sichern</span><svg class="arr" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5"/></svg></button>
+        <p class="fine">Ein Tipp und du bekommst sofort deinen persönlichen Gutschein-Code. Kostenlos und unverbindlich. <a href="/datenschutz.html">Datenschutz</a></p>
       </form>
-      <div class="ok" id="ok">
-        <div style="font-size:44px">🎁</div>
-        <h3>Fast geschafft.</h3>
-        <p>WhatsApp hat sich mit deiner Anfrage geöffnet. Tippe dort nur noch auf Senden, dann bestätigen wir deinen Termin.</p>
-        <div class="alt"><a href="tel:+436607036723" data-cta="call-after">Lieber anrufen</a><a href="#" id="again">WhatsApp erneut öffnen</a></div>
-      </div>
     </div>
     <div class="alt" style="max-width:560px;margin:16px auto 0">
       <a href="tel:+436607036723" data-cta="call">📞 Anrufen</a>
@@ -318,7 +321,7 @@
   </div>
 </footer>
 
-<div class="sticky"><a class="btn btn-red" href="#termin" data-cta="sticky">Wintergeschenk sichern</a></div>
+<div class="sticky"><a class="btn btn-red" href="#termin" data-cta="sticky">Kostenlosen Wintercheck sichern<svg class="arr" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5"/></svg></a></div>
 
 <script>
   // Quelle der Anfrage (Google, Facebook, Instagram …) aus UTM-Parametern übernehmen
@@ -338,33 +341,66 @@
   while (n < 10) {
     if (d.getDay() !== 0 && d.getDay() !== 6) {
       const o = document.createElement('option'); o.value = fmt.format(d);
+      o.dataset.date = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
       o.textContent = (n === 0 && d.toDateString() === new Date().toDateString() ? 'Heute, ' : '') + fmt.format(d);
       tag.appendChild(o); n++;
     }
     d.setDate(d.getDate() + 1);
   }
 
+  // Gutschein: Anfrage speichern, persönlichen Code holen, dann eigene Danke-Seite (Conversion-URL)
+  const KEY = 'wg_claim';
+  const ALPHA = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // ohne 0/O/1/I
+  function localCode() {
+    const a = new Uint8Array(4);
+    (window.crypto && crypto.getRandomValues) ? crypto.getRandomValues(a) : a.forEach((_, i) => a[i] = Math.random() * 256);
+    return 'WG-' + Array.from(a, x => ALPHA[x % ALPHA.length]).join('');
+  }
+  function saveClaim(c) {
+    let ok = false;
+    try { localStorage.setItem(KEY, JSON.stringify(c)); ok = true; } catch (e) {}
+    try { sessionStorage.setItem(KEY, JSON.stringify(c)); ok = true; } catch (e) {}
+    return ok;
+  }
+  // Schon einen Gutschein? Kleiner Hinweis über dem Formular
+  try {
+    const prev = JSON.parse(localStorage.getItem(KEY) || 'null');
+    if (prev && prev.code) { document.getElementById('savedCode').textContent = prev.code; document.getElementById('saved').hidden = false; }
+  } catch (e) {}
+
   const form = document.getElementById('form');
-  let waUrl = '';
-  form.addEventListener('submit', e => {
+  const btn = document.getElementById('submit');
+  let busy = false;
+  form.addEventListener('submit', async e => {
     e.preventDefault();
+    if (busy) return;
     const name = form.name.value.trim(), tel = form.tel.value.trim();
     const err = document.getElementById('err');
     if (name.length < 2 || tel.replace(/\D/g, '').length < 6) { err.style.display = 'block'; return; }
     err.style.display = 'none';
-    const lines = [
-      'Hallo, ich möchte das Wintergeschenk sichern (gratis Batterietest + Flüssigkeitsstände).',
-      '', 'Name: ' + name, 'Telefon: ' + tel, 'Wunschtermin: ' + form.tag.value + ', ' + form.zeit.value
-    ];
-    if (form.auto.value.trim()) lines.push('Auto: ' + form.auto.value.trim());
-    lines.push('', 'Quelle: ' + source + (campaign ? ' / ' + campaign : ''));
-    waUrl = 'https://wa.me/436607036723?text=' + encodeURIComponent(lines.join('\n'));
-    track('lead_submit', { tag: form.tag.value, zeit: form.zeit.value });
-    window.open(waUrl, '_blank') || (location.href = waUrl);
-    form.style.display = 'none';
-    document.getElementById('ok').style.display = 'block';
+    busy = true; btn.disabled = true; btn.querySelector('.lbl').textContent = 'Wird gesichert …';
+    const tagOpt = form.tag.selectedOptions ? form.tag.selectedOptions[0] : form.tag.options[form.tag.selectedIndex];
+    const zeitOpt = form.zeit.selectedOptions ? form.zeit.selectedOptions[0] : form.zeit.options[form.zeit.selectedIndex];
+    const payload = { name: name, tel: tel, tag: form.tag.value, zeit: form.zeit.value, auto: form.auto.value.trim(), source: source, campaign: campaign,
+      date: (tagOpt && tagOpt.dataset.date) || '', start: (zeitOpt && zeitOpt.dataset.start) || '', end: (zeitOpt && zeitOpt.dataset.end) || '' };
+    let code = '', stored = false, local = false;
+    try {
+      const ctrl = 'AbortController' in window ? new AbortController() : null;
+      const t = ctrl && setTimeout(() => ctrl.abort(), 8000);
+      const r = await fetch('/api/claim', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload), signal: ctrl && ctrl.signal });
+      if (t) clearTimeout(t);
+      const j = r.ok ? await r.json() : null;
+      if (j && j.ok && /^WG-[A-Z2-9]{4}$/.test(j.code)) { code = j.code; stored = !!j.stored; }
+    } catch (x) {}
+    if (!code) { code = localCode(); local = true; }
+    const claim = Object.assign({}, payload, { code: code, stored: stored, local: local, createdAt: new Date().toISOString() });
+    track('lead_submit', { tag: payload.tag, zeit: payload.zeit, code: code, local: local });
+    const saved = saveClaim(claim);
+    location.href = '/wintergeschenk/danke/' + (saved ? '' : '#' + code);
   });
-  document.getElementById('again').addEventListener('click', e => { e.preventDefault(); if (waUrl) window.open(waUrl, '_blank'); });
+
+  // Zurück-Taste (bfcache): Knopf wieder freigeben
+  window.addEventListener('pageshow', () => { busy = false; btn.disabled = false; btn.querySelector('.lbl').textContent = 'Kostenlosen Wintercheck sichern'; });
 
   // Sanftes Einblenden
   const io = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(x => { if (x.isIntersecting) { x.target.classList.add('in'); io.unobserve(x.target); } }), { threshold: .12 }) : null;
