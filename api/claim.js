@@ -18,9 +18,9 @@ function send(res, status, body) {
 }
 
 function makeCode() {
-  const bytes = crypto.randomBytes(4);
+  const bytes = crypto.randomBytes(5);
   let s = '';
-  for (let i = 0; i < 4; i++) s += ALPHABET[bytes[i] % ALPHABET.length]; // 32 Zeichen → gleichverteilt
+  for (let i = 0; i < 5; i++) s += ALPHABET[bytes[i] % ALPHABET.length]; // 32 Zeichen → gleichverteilt
   return 'WG-' + s;
 }
 

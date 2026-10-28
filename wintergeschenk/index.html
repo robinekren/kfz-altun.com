@@ -352,7 +352,7 @@
   const KEY = 'wg_claim';
   const ALPHA = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // ohne 0/O/1/I
   function localCode() {
-    const a = new Uint8Array(4);
+    const a = new Uint8Array(5);
     (window.crypto && crypto.getRandomValues) ? crypto.getRandomValues(a) : a.forEach((_, i) => a[i] = Math.random() * 256);
     return 'WG-' + Array.from(a, x => ALPHA[x % ALPHA.length]).join('');
   }
@@ -390,7 +390,7 @@
       const r = await fetch('/api/claim', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload), signal: ctrl && ctrl.signal });
       if (t) clearTimeout(t);
       const j = r.ok ? await r.json() : null;
-      if (j && j.ok && /^WG-[A-Z2-9]{4}$/.test(j.code)) { code = j.code; stored = !!j.stored; }
+      if (j && j.ok && /^WG-[A-Z2-9]{4,5}$/.test(j.code)) { code = j.code; stored = !!j.stored; }
     } catch (x) {}
     if (!code) { code = localCode(); local = true; }
     const claim = Object.assign({}, payload, { code: code, stored: stored, local: local, createdAt: new Date().toISOString() });

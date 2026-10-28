@@ -188,8 +188,8 @@
   function read(store) { try { return JSON.parse(window[store].getItem(KEY) || 'null'); } catch (e) { return null; } }
   let claim = read('sessionStorage') || read('localStorage');
   // Notfall ohne Speicher: nur der Code kommt über den Hash (#WG-XXXX)
-  if (!claim && /^#WG-[A-Z2-9]{4}$/.test(location.hash)) claim = { code: location.hash.slice(1), local: true };
-  if (claim && !/^WG-[A-Z2-9]{4}$/.test(claim.code || '')) claim = null;
+  if (!claim && /^#WG-[A-Z2-9]{4,5}$/.test(location.hash)) claim = { code: location.hash.slice(1), local: true };
+  if (claim && !/^WG-[A-Z2-9]{4,5}$/.test(claim.code || '')) claim = null;
 
   window.dataLayer = window.dataLayer || [];
   function track(event, data) { window.dataLayer.push(Object.assign({ event: event, source: (claim && claim.source) || '', campaign: (claim && claim.campaign) || '' }, data || {})); }
