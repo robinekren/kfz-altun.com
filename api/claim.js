@@ -97,7 +97,7 @@ async function notify(claim) {
   const to = process.env.NOTIFY_EMAIL || 'robinekrenn@gmail.com';
   const subject = 'Neue Anfrage Wintergeschenk · ' + claim.code + ' · ' + claim.name;
   const fields = mailFields(claim);
-  const t = withTimeout(4000);
+  const t = withTimeout(9000);
   try {
     let r;
     if (process.env.RESEND_API_KEY) {
