@@ -8,7 +8,7 @@ const crypto = require('crypto');
 
 const ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // ohne 0/O/1/I
 const BLOB_API = 'https://blob.vercel-storage.com';
-const CONSENT_TEXT = 'Ja, Fahrzeugtechnik Altun darf mir gelegentlich Angebote und Tipps rund ums Auto per E-Mail schicken. Abbestellen jederzeit mit einem Klick.';
+const CONSENT_TEXT = 'Ja, KFZ Altun Neunkirchen darf mir gelegentlich Angebote und Tipps rund ums Auto per E-Mail schicken. Abbestellen jederzeit mit einem Klick.';
 const LIMITS = { name: 80, tel: 30, email: 120, tag: 60, zeit: 60, auto: 80, source: 60, campaign: 80, date: 10, start: 5, end: 5 };
 
 function send(res, status, body) {

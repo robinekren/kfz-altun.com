@@ -1,8 +1,8 @@
 // Kalender-Helfer für den Wintergeschenk-Termin (Browser + Node-Test, ohne Bibliotheken)
 (function (root) {
   var TZ = 'Europe/Vienna';
-  var TITLE = 'Gratis Wintercheck · Fahrzeugtechnik Altun';
-  var LOCATION = 'Fahrzeugtechnik Altun, Sandgasse 12, 2620 Neunkirchen';
+  var TITLE = 'Gratis Wintercheck · KFZ Altun Neunkirchen';
+  var LOCATION = 'KFZ Altun Neunkirchen, Sandgasse 12, 2620 Neunkirchen';
   var PHONE = '+43 660 7036723';
 
   // Offset (ms) von Europe/Vienna zu UTC zum Zeitpunkt t
@@ -67,7 +67,7 @@
       : 'TRIGGER:-PT1H';
     alarms.push(['BEGIN:VALARM', 'ACTION:DISPLAY', 'DESCRIPTION:Heute: Gratis Wintercheck · Code ' + claim.code, morning, 'END:VALARM']);
     var rows = [
-      'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Fahrzeugtechnik Altun//Wintergeschenk//DE', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH',
+      'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//KFZ Altun Neunkirchen//Wintergeschenk//DE', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH',
       'BEGIN:VEVENT',
       'UID:' + ev.uid,
       'DTSTAMP:' + utcStamp(now || new Date()),
